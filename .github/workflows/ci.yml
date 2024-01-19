@@ -3,7 +3,7 @@ name: Run tests and SCA
 on: [push]
 
 jobs:
-  build:
+  code-coverage:
     runs-on: ubuntu-latest
 
     steps:
@@ -12,28 +12,39 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.x'
-      
+          dotnet-version: "8.x"
+
       - name: dotnet restore
         run: dotnet restore
-      
+
       - name: dotnet build
         run: dotnet build --no-restore
-      
+
       - name: dotnet test
         run: dotnet test --no-build --collect:"XPlat Code Coverage"
 
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.2.0
         with:
-          reports: '*/**/coverage.cobertura.xml'
+          reports: "*/**/coverage.cobertura.xml"
           targetdir: coveragereport
 
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v4.2.0
         with:
-          name: CoverageReport # Artifact name        
-          path: coveragereport # Directory containing files to upload
+          name: CoverageReport
+          path: coveragereport
+
+  mutation-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.x"
 
       - name: install stryker
         run: dotnet tool install -g dotnet-stryker
@@ -45,5 +56,5 @@ jobs:
       - name: Upload mutation report artifact
         uses: actions/upload-artifact@v4.2.0
         with:
-          name: MutationReport # Artifact name        
-          path: WebApplication1.Tests/StrykerOutput # Directory containing files to upload
+          name: MutationReport
+          path: WebApplication1.Tests/StrykerOutput
