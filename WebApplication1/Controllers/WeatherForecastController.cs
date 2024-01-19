@@ -20,26 +20,26 @@ namespace WebApplication1.Controllers
         [HttpGet(Name = "GetWeatherForCity")]
         public IActionResult GetWeatherForCity()
         {
-            var forecast = _weatherService.DownloadForecast();
+            var weatherForecasts = _weatherService.DownloadForecast();
 
-            if (!forecast.Any()) 
+            if (!weatherForecasts.Any()) 
             {
-                return new NotFoundObjectResult(forecast);
+                return new NotFoundObjectResult(weatherForecasts);
             }
 
-            var forecastsForCity = forecast.Where(x => x.City == "Szczecin");
+            var forecastsForCity = weatherForecasts.Where(x => x.City == "Szczecin");
 
             var filteredForecasts = new List<WeatherForecast>();
 
-            foreach (var forecastForCity in forecastsForCity)
+            foreach (var forecast in forecastsForCity)
             {
-                if (forecastForCity.Date >= DateTime.UtcNow.AddDays(-5))
+                if (forecast.Date >= DateTime.UtcNow.AddDays(-5))
                 {
-                    filteredForecasts.Add(forecastForCity);
+                    filteredForecasts.Add(forecast);
                 }
             }
 
-            return new OkObjectResult(filteredForecasts);
+            return new OkObjectResult(filteredForecasts.OrderBy(x => x.Date).FirstOrDefault());
         }
     }
 }

@@ -11,29 +11,36 @@ namespace WebApplication1.Tests
         [Fact]
         public void GetWeatherForCity_WhenNoForecast_ShouldReturnNotFound()
         {
+            // Arrange
             var serviceMock = new Mock<IWeather>();
             var loggerMock = new Mock<ILogger>();
             serviceMock.Setup(x => x.DownloadForecast()).Returns(Enumerable.Empty<WeatherForecast>());
             var controller = new WeatherForecastController(serviceMock.Object, loggerMock.Object);
 
+            // Act
             var response = controller.GetWeatherForCity();
 
+            // Assert
             Assert.IsType<NotFoundObjectResult>(response);
         }
 
         [Fact]
         public void GetWeatherForCity_WhenHasForecast_ShouldReturnOk()
         {
-            var forecasts = new List<WeatherForecast>();
-            var forecast = new WeatherForecast { City = "Szczecin", Date = DateTime.UtcNow };
-            forecasts.Add(forecast);
+            // Arrange
             var serviceMock = new Mock<IWeather>();
             var loggerMock = new Mock<ILogger>();
-            serviceMock.Setup(x => x.DownloadForecast()).Returns(forecasts);
+
+            var sampleForecast = new WeatherForecast { City = "Szczecin", Date = DateTime.UtcNow };
+            var forecastsToReturn = new List<WeatherForecast> { sampleForecast };
+
+            serviceMock.Setup(x => x.DownloadForecast()).Returns(forecastsToReturn);
             var controller = new WeatherForecastController(serviceMock.Object, loggerMock.Object);
 
+            // Act
             var response = controller.GetWeatherForCity();
 
+            // Assert
             Assert.IsType<OkObjectResult>(response);
         }
     }
