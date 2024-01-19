@@ -26,7 +26,7 @@ jobs:
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.2.0
         with:
-          reports: */**/coverage.cobertura.xml
+          reports: '*/**/coverage.cobertura.xml'
           targetdir: coveragereport
 
       - name: Upload coverage report artifact
