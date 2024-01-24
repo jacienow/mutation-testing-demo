@@ -1,6 +1,6 @@
 name: Run tests and SCA
 
-on: [push]
+on: [push, workflow_dispatch]
 
 jobs:
   code-coverage:
