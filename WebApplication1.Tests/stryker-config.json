@@ -39,7 +39,9 @@
     "test-projects": [],
     "test-case-filter": "",
     "ignore-mutations": [],
-    "ignore-methods": [],
+    "ignore-methods": [
+      "Log*"
+    ],
     "report-file-name": "mutation-report",
     "break-on-initial-test-failure": false
   }
