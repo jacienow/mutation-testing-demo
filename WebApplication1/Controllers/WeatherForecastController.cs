@@ -22,7 +22,7 @@ namespace WebApplication1.Controllers
         {
             var weatherForecasts = _weatherService.DownloadForecast();
 
-            if (!weatherForecasts.Any()) 
+            if (!weatherForecasts.Any())
             {
                 return new NotFoundObjectResult(weatherForecasts);
             }
@@ -36,6 +36,7 @@ namespace WebApplication1.Controllers
                 if (forecast.Date >= DateTime.UtcNow.AddDays(-5))
                 {
                     filteredForecasts.Add(forecast);
+                    _logger.LogInformation("forecast added!");
                 }
             }
 
